@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redis Queue API Test</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body class="container py-5">
+    <h1 class="mb-5">Redis Queue API Test</h1>
+
+    <div class="form-group">
+        <label for="apiTokenInput"><h2>API Key</h2></label>
+        <input type="text" id="apiTokenInput" class="form-control" placeholder="Enter API token">
+    </div>
+
+    <div class="form-group">
+        <label for="pushInput"><h2>Push</h2></label>
+        <textarea id="pushInput" class="form-control" placeholder="Enter messages separated by a newline"></textarea>
+        <button onclick="pushMessages()" class="btn btn-primary mt-2">Push</button>
+        <p id="pushResponse" class="mt-2"></p>
+    </div>
+
+    <div class="form-group">
+        <label><h2>Pop</h2></label>
+        <input type="number" id="popInput" class="form-control" placeholder="Enter number of messages to pop" min="1" value="1">
+        <button onclick="popMessage()" class="btn btn-primary mt-2">Pop</button>
+        <p id="popResponse" class="mt-2"></p>
+    </div>
+
+    <div class="form-group">
+        <label><h2>Count</h2></label>
+        <button onclick="countMessages()" class="btn btn-primary">Count</button>
+        <p id="countResponse" class="mt-2"></p>
+    </div>
+
+    <!-- Rest of your code -->
+
+    <script>
+                const API_URL = 'http://localhost:5050/api/queue';  // Replace with your API URL if different
+
+function getHeaders() {
+    const apiToken = $('#apiTokenInput').val();
+    return { 'x-api-key': apiToken };
+}
+
+function pushMessages() {
+    const messages = $('#pushInput').val().split('\n');
+    $.ajax({
+        url: `${API_URL}/push`,
+        method: 'POST',
+        headers: getHeaders(),
+        data: JSON.stringify({ messages: messages }),
+        contentType: 'application/json',
+    })
+    .done((data) => {
+        $('#pushResponse').text(JSON.stringify(data));
+    })
+    .fail((error) => {
+        $('#pushResponse').text(`Error: ${error.responseText}`);
+    });
+}
+
+
+function popMessage() {
+        const n = $('#popInput').val();
+        $.ajax({
+            url: `${API_URL}/pop`,
+            method: 'POST',
+            headers: getHeaders(),
+            data: JSON.stringify({ n: n }),
+            contentType: 'application/json',
+        })
+        .done((data) => {
+            $('#popResponse').text(JSON.stringify(data));
+        })
+        .fail((error) => {
+            $('#popResponse').text(`Error: ${error.responseText}`);
+        });
+    }
+
+function countMessages() {
+    $.ajax({
+        url: `${API_URL}/count`,
+        method: 'GET',
+        headers: getHeaders(),
+    })
+    .done((data) => {
+        $('#countResponse').text(JSON.stringify(data));
+    })
+    .fail((error) => {
+        $('#countResponse').text(`Error: ${error.responseText}`);
+    });
+}
+    </script>
+</body>
+</html>
