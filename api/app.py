@@ -52,10 +52,6 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-# API_KEYS = {
-#     "admin": "your-api-key"
-# }
-
 API_KEYS = {
     "admin": config.get('API', 'Key')
 }
