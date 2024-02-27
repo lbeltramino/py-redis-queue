@@ -1,6 +1,6 @@
 # Redis Queue API
 
-This project is a message queue system built with Flask and Redis. It exposes an API with three endpoints: pop, push, and count.
+This project is a message queue system built with Flask and Redis. It exposes an API with four endpoints: health, pop, push, and count.
 
 ## API Endpoints
 
@@ -136,7 +136,7 @@ The application is containerized using Docker. You can start the application usi
 docker-compose up
 ```
 
-This will start the Flask application, Redis, Prometheus, and Grafana.
+This will start the Flask application, Redis, Prometheus, Grafana and a web application that can be used to test the API.
 
 ## API Key
 The API key is loaded from a configuration file named config.ini, which is mounted in the container with the Flask application. This file should have the following format:
